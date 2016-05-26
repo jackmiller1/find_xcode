@@ -1,9 +1,12 @@
 import os
 from subprocess import call
-from blessings import Terminal
-import fnmatch
 
-term = Terminal()
+formatting = {
+    'reset':    '\033[0m',
+    'red': '\033[31m',
+    'green': '\033[32m',
+    'bold': '\033[1m'
+}
 
 xcodeFileExt = (".xcworkspace", ".xcodeproj")
 xcodeFiles = []
@@ -14,7 +17,7 @@ for root, dirs, files in os.walk("./"):
             xcodeFiles.append(os.path.abspath(os.path.join(root, dirName)))
 
 if len(xcodeFiles) == 0:
-    print "{t.red}{t.bold}ERROR: No xcode workspace or project found!{t.normal}".format(t=term)
+    print formatting['red'] + formatting['bold'] + "ERROR: No xcode workspace or project found!" + formatting['reset']
 elif len(xcodeFiles) == 1:
     os.system("open '" + str(xcodeFiles[0][1]) + "'")
 else:
@@ -25,8 +28,8 @@ else:
     while (shouldQuestion):
         fi = int(input("file: "))
         if fi < len(xcodeFiles):
-            print "{t.green}{t.bold}Opening {fileName}!{t.normal}".format(t=term, fileName=xcodeFiles[fi])
+            print formatting['green'] + formatting['bold'] + "Opening {fileName}!".format(fileName=xcodeFiles[fi]) + formatting['reset']
             os.system("open '" + str(xcodeFiles[fi]) + "'")
             shouldQuestion = False
         else:
-            print "{t.red}{t.bold}ERROR: Not a valid number!{t.normal}".format(t=term)
+            print formatting['red'] + formatting['bold'] + "ERROR: Not a valid number!" + formatting['reset']
